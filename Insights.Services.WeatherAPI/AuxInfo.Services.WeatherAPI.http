@@ -1,0 +1,6 @@
+@Insights.Services.WeatherAPI_HostAddress = http://localhost:5296
+
+GET {{Insights.Services.WeatherAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
