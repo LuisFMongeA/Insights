@@ -19,15 +19,12 @@ public class CountriesData(IHttpClientFactory httpClientFactory, IConfiguration 
 
         var response = await client.GetAsync(endpoint);
 
-        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            return null;
-
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
 
         // RestCountries devuelve siempre un array, cogemos el primero
-        var countries = JsonSerializer.Deserialize<List<CountryDto>>(content, JsonOptions);
-        return countries?.FirstOrDefault();
+        var country = JsonSerializer.Deserialize<CountryDto[]>(content, JsonOptions);
+        return country[0];
     }
 }

@@ -1,133 +1,102 @@
-﻿namespace Insights.Gateway.Model
+﻿using System.Text.Json.Serialization;
+
+namespace Insights.Gateway.Model;
+
+public class CountryDto
 {
-    using System;
-    using Newtonsoft.Json;
+    [JsonPropertyName("name")]
+    public CountryName? Name { get; set; }
 
-    public partial class CountryDto
-    {
-        [JsonProperty("name")]
-        public Name? Name { get; set; }
+    [JsonPropertyName("tld")]
+    public string[]? Tld { get; set; }
 
-        [JsonProperty("tld")]
-        public string[]? Tld { get; set; }
+    [JsonPropertyName("cca2")]
+    public string Cca2 { get; set; } = string.Empty;
 
-        [JsonProperty("cca2")]
-        public string Cca2 { get; set; }
+    [JsonPropertyName("cca3")]
+    public string Cca3 { get; set; } = string.Empty;
 
-        [JsonProperty("cca3")]
-        public string Cca3 { get; set; }
+    [JsonPropertyName("cioc")]
+    public string? Cioc { get; set; }
 
-        [JsonProperty("cioc")]
-        public string Cioc { get; set; }
+    [JsonPropertyName("independent")]
+    public bool Independent { get; set; }
 
-        [JsonProperty("independent")]
-        public bool Independent { get; set; }
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
+    [JsonPropertyName("unMember")]
+    public bool UnMember { get; set; }
 
-        [JsonProperty("unMember")]
-        public bool UnMember { get; set; }
+    [JsonPropertyName("capital")]
+    public string[]? Capital { get; set; }
 
-        [JsonProperty("capital")]
-        public string[] Capital { get; set; }
+    [JsonPropertyName("altSpellings")]
+    public string[]? AltSpellings { get; set; }
 
-        [JsonProperty("altSpellings")]
-        public string[] AltSpellings { get; set; }
+    [JsonPropertyName("region")]
+    public string Region { get; set; } = string.Empty;
 
-        [JsonProperty("region")]
-        public string Region { get; set; }
+    [JsonPropertyName("subregion")]
+    public string? Subregion { get; set; }
 
-        [JsonProperty("subregion")]
-        public string Subregion { get; set; }
+    [JsonPropertyName("landlocked")]
+    public bool Landlocked { get; set; }
 
-        [JsonProperty("latlng")]
-        public long[] Latlng { get; set; }
+    [JsonPropertyName("borders")]
+    public string[]? Borders { get; set; }
 
-        [JsonProperty("landlocked")]
-        public bool Landlocked { get; set; }
+    [JsonPropertyName("area")]
+    public double Area { get; set; }
 
-        [JsonProperty("borders")]
-        public string[] Borders { get; set; }
+    [JsonPropertyName("flag")]
+    public string Flag { get; set; } = string.Empty;
 
-        [JsonProperty("area")]
-        public long Area { get; set; }
+    [JsonPropertyName("population")]
+    public long Population { get; set; }
 
-        [JsonProperty("flag")]
-        public string Flag { get; set; }
+    [JsonPropertyName("fifa")]
+    public string? Fifa { get; set; }
 
-        [JsonProperty("population")]
-        public long Population { get; set; }
+    [JsonPropertyName("timezones")]
+    public string[]? Timezones { get; set; }
 
-        [JsonProperty("fifa")]
-        public string Fifa { get; set; }
+    [JsonPropertyName("continents")]
+    public string[]? Continents { get; set; }
 
-        [JsonProperty("car")]
-        public Car Car { get; set; }
+    [JsonPropertyName("flags")]
+    public Flags? Flags { get; set; }
 
-        [JsonProperty("timezones")]
-        public string[] Timezones { get; set; }
+    [JsonPropertyName("startOfWeek")]
+    public string? StartOfWeek { get; set; }
 
-        [JsonProperty("continents")]
-        public string[] Continents { get; set; }
-
-        [JsonProperty("flags")]
-        public Flags Flags { get; set; }
-
-        [JsonProperty("coatOfArms")]
-        public CoatOfArms CoatOfArms { get; set; }
-
-        [JsonProperty("startOfWeek")]
-        public string StartOfWeek { get; set; }
-
-        [JsonProperty("capitalInfo")]
-        public CapitalInfo CapitalInfo { get; set; }
-    }
-
-    public partial class CapitalInfo
-    {
-        [JsonProperty("latlng")]
-        public double[] Latlng { get; set; }
-    }
-
-    public partial class Car
-    {
-        [JsonProperty("signs")]
-        public string[] Signs { get; set; }
-
-        [JsonProperty("side")]
-        public string Side { get; set; }
-    }
-
-    public partial class CoatOfArms
-    {
-        [JsonProperty("png")]
-        public Uri Png { get; set; }
-
-        [JsonProperty("svg")]
-        public Uri Svg { get; set; }
-    }
-
-    public partial class Flags
-    {
-        [JsonProperty("png")]
-        public Uri Png { get; set; }
-
-        [JsonProperty("svg")]
-        public Uri Svg { get; set; }
-
-        [JsonProperty("alt")]
-        public string Alt { get; set; }
-    }
-
-    public partial class Name
-    {
-        [JsonProperty("common")]
-        public string Common { get; set; }
-
-        [JsonProperty("official")]
-        public string Official { get; set; }
-
-    }
+    [JsonPropertyName("capitalInfo")]
+    public CapitalInfo? CapitalInfo { get; set; }
 }
 
+public class CountryName
+{
+    [JsonPropertyName("common")]
+    public string Common { get; set; } = string.Empty;
+
+    [JsonPropertyName("official")]
+    public string Official { get; set; } = string.Empty;
+}
+
+public class Flags
+{
+    [JsonPropertyName("png")]
+    public string? Png { get; set; }
+
+    [JsonPropertyName("svg")]
+    public string? Svg { get; set; }
+
+    [JsonPropertyName("alt")]
+    public string? Alt { get; set; }
+}
+
+public class CapitalInfo
+{
+    [JsonPropertyName("latlng")]
+    public double[]? Latlng { get; set; }
+}

@@ -17,17 +17,26 @@ public class GeoController(
     [HttpGet]
     public async Task<ActionResult<GeoInfoDto>> Get([FromQuery] GeoRequestDto request)
     {
-        // 1. Resuelve ciudad: por nombre si viene, si no por coordenadas
-        var city = request.CityName is not null
-            ? (await citiesClient.GetCitiesByNameAsync(request.CityName)).FirstOrDefault()
-            : await citiesClient.GetCityByCoordinatesAsync(request.Lat, request.Lon);
-
-        if (city is null)
+        CityDto city;
+        if (!string.IsNullOrEmpty(request.IpAddress))
+        {
+            city = await citiesClient.GetCityByIpAddressAsync(request.IpAddress);
+        }
+        else if (!string.IsNullOrEmpty(request.CityName))
+        {
+            city = await citiesClient.GetCitiesByNameAsync(request.CityName);
+        }
+        else if(request.Lat is not null && request.Lon is not null){ 
+            city = await citiesClient.GetCityByCoordinatesAsync(request.Lat.Value, request.Lon.Value);
+        }
+        else
+        {
             return NotFound("City not found");
+        }            
 
         // 2. Llama a países y weather en paralelo
-        var countryTask = countriesClient.GetCountryByCodeAsync(city.Country);
-        var weatherTask = weatherClient.GetWeatherByLocationAsync(request.Lat, request.Lon);
+        var countryTask = countriesClient.GetCountryByCodeAsync(city.CountryCode);
+        var weatherTask = weatherClient.GetWeatherByLocationAsync(city.Latitude, city.Longitude);
 
         await Task.WhenAll(countryTask, weatherTask);
 
@@ -36,11 +45,11 @@ public class GeoController(
 
         _ = messageBus.PublishAsync("geo.info.requested", new GeoInfoRequestedEvent
         {
-            Lat = request.Lat,
-            Lon = request.Lon,
-            CityName = request.CityName,
+            Lat = city.Latitude,
+            Lon = city.Longitude,
+            ParamCityName = request.CityName,
             ResolvedCityName = city.Name,
-            CountryCode = city.Country
+            CountryCode = city.CountryCode
         });
 
         // 3. Convierte unix timestamps a DateTime
@@ -52,7 +61,7 @@ public class GeoController(
         {
             CityName = city.Name,
             CityPopulation = city.Population,
-            CountryCode = city.Country,
+            CountryCode = city.CountryCode,
             CountryName = country?.Name?.Common ?? string.Empty,
             Region = country?.Region ?? string.Empty,
             Subregion = country?.Subregion ?? string.Empty,

@@ -1,25 +1,29 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Insights.Gateway.Model
 {
     public class CityDto
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("city")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonProperty("latitude")]
+        [JsonPropertyName("lat")]
         public double Latitude { get; set; }
 
-        [JsonProperty("longitude")]
+        [JsonPropertyName("lon")]
         public double Longitude { get; set; }
 
-        [JsonProperty("country")]
+        [JsonPropertyName("country")]
         public string Country { get; set; } = string.Empty;
 
-        [JsonProperty("population")]
+        [JsonPropertyName("countryCode")]
+        public string CountryCode { get; set; } = string.Empty;
+
+        [JsonPropertyName("population")]
         public long Population { get; set; }
 
-        [JsonProperty("is_capital")]
+        [JsonPropertyName("is_capital")]
         public bool IsCapital { get; set; }
     }
 }

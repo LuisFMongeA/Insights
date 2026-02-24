@@ -10,7 +10,7 @@ public class CitiesHttpClient(HttpClient httpClient, IConfiguration configuratio
         PropertyNameCaseInsensitive = true
     };
 
-    public async Task<List<CityDto>> GetCitiesByNameAsync(string cityName)
+    public async Task<CityDto> GetCitiesByNameAsync(string cityName)
     {
         var endpoint = configuration["ApiInfo:Cities:Endpoints:GetCitiesByName"]!
             .Replace("##CITY##", Uri.EscapeDataString(cityName));
@@ -18,7 +18,7 @@ public class CitiesHttpClient(HttpClient httpClient, IConfiguration configuratio
         var response = await httpClient.GetAsync(endpoint);
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<List<CityDto>>(JsonOptions)
+        return await response.Content.ReadFromJsonAsync<CityDto>(JsonOptions)
             ?? throw new Exception($"Empty response from CitiesAPI for: {cityName}");
     }
 
@@ -32,5 +32,17 @@ public class CitiesHttpClient(HttpClient httpClient, IConfiguration configuratio
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<CityDto?>(JsonOptions);
+    }
+
+    public async Task<CityDto?> GetCityByIpAddressAsync(string ipAddress)
+    {
+        CityDto res;
+        var endpoint = configuration["ApiInfo:Cities:Endpoints:GetCityByIPAddress"]!
+            .Replace("##IP_ADDRESS##", Uri.EscapeDataString(ipAddress));
+
+        var response = await httpClient.GetAsync(endpoint);
+        response.EnsureSuccessStatusCode();
+        res = await response.Content.ReadFromJsonAsync<CityDto?>(JsonOptions);
+        return res;
     }
 }

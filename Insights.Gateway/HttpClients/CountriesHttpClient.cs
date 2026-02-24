@@ -1,4 +1,5 @@
-﻿using Insights.Gateway.Model;
+﻿
+using Insights.Gateway.Model;
 using System.Text.Json;
 
 namespace Insights.Gateway.HttpClients;

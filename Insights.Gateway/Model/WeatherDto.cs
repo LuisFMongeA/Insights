@@ -1,134 +1,126 @@
-﻿namespace Insights.Gateway.Model
+﻿using System.Text.Json.Serialization;
+
+namespace Insights.Gateway.Model;
+
+public class WeatherDto
 {
-    using Newtonsoft.Json;
-    public class WeatherDto
-    {
+    [JsonPropertyName("coord")]
+    public Coord? Coord { get; set; }
 
-            [JsonProperty("coord")]
-            public Coord Coord { get; set; }
+    [JsonPropertyName("weather")]
+    public WeatherCondition[]? Weather { get; set; }
 
-            [JsonProperty("weather")]
-            public Weather[] Weather { get; set; }
+    [JsonPropertyName("base")]
+    public string Base { get; set; } = string.Empty;
 
-            [JsonProperty("base")]
-            public string Base { get; set; }
+    [JsonPropertyName("main")]
+    public Main? Main { get; set; }
 
-            [JsonProperty("main")]
-            public Main Main { get; set; }
+    [JsonPropertyName("visibility")]
+    public long Visibility { get; set; }
 
-            [JsonProperty("visibility")]
-            public long Visibility { get; set; }
+    [JsonPropertyName("wind")]
+    public Wind? Wind { get; set; }
 
-            [JsonProperty("wind")]
-            public Wind Wind { get; set; }
+    [JsonPropertyName("clouds")]
+    public Clouds? Clouds { get; set; }
 
-            [JsonProperty("clouds")]
-            public Clouds Clouds { get; set; }
+    [JsonPropertyName("dt")]
+    public long Dt { get; set; }
 
-            [JsonProperty("dt")]
-            public long Dt { get; set; }
+    [JsonPropertyName("sys")]
+    public Sys? Sys { get; set; }
 
-            [JsonProperty("sys")]
-            public Sys Sys { get; set; }
+    [JsonPropertyName("timezone")]
+    public long Timezone { get; set; }
 
-            [JsonProperty("timezone")]
-            public long Timezone { get; set; }
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-            [JsonProperty("id")]
-            public long Id { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 
-            [JsonProperty("name")]
-            public string Name { get; set; }
+    [JsonPropertyName("cod")]
+    public long Cod { get; set; }
+}
 
-            [JsonProperty("cod")]
-            public long Cod { get; set; }
-        }
+public class Coord
+{
+    [JsonPropertyName("lon")]
+    public double Lon { get; set; }
 
-        public partial class Clouds
-        {
-            [JsonProperty("all")]
-            public long All { get; set; }
-        }
+    [JsonPropertyName("lat")]
+    public double Lat { get; set; }
+}
 
-        public partial class Coord
-        {
-            [JsonProperty("lon")]
-            public double Lon { get; set; }
+public class Main
+{
+    [JsonPropertyName("temp")]
+    public double Temp { get; set; }
 
-            [JsonProperty("lat")]
-            public double Lat { get; set; }
-        }
+    [JsonPropertyName("feels_like")]
+    public double FeelsLike { get; set; }
 
-        public partial class Main
-        {
-            [JsonProperty("temp")]
-            public float Temp { get; set; }
+    [JsonPropertyName("temp_min")]
+    public double TempMin { get; set; }
 
-            [JsonProperty("feels_like")]
-            public float FeelsLike { get; set; }
+    [JsonPropertyName("temp_max")]
+    public double TempMax { get; set; }
 
-            [JsonProperty("temp_min")]
-            public float TempMin { get; set; }
+    [JsonPropertyName("pressure")]
+    public long Pressure { get; set; }
 
-            [JsonProperty("temp_max")]
-            public float TempMax { get; set; }
+    [JsonPropertyName("humidity")]
+    public long Humidity { get; set; }
 
-            [JsonProperty("pressure")]
-            public long Pressure { get; set; }
+    [JsonPropertyName("sea_level")]
+    public long SeaLevel { get; set; }
 
-            [JsonProperty("humidity")]
-            public long Humidity { get; set; }
+    [JsonPropertyName("grnd_level")]
+    public long GrndLevel { get; set; }
+}
 
-            [JsonProperty("sea_level")]
-            public long SeaLevel { get; set; }
+public class Sys
+{
+    [JsonPropertyName("country")]
+    public string Country { get; set; } = string.Empty;
 
-            [JsonProperty("grnd_level")]
-            public long GrndLevel { get; set; }
-        }
+    [JsonPropertyName("sunrise")]
+    public long Sunrise { get; set; }
 
-        public partial class Sys
-        {
-            [JsonProperty("type")]
-            public long Type { get; set; }
+    [JsonPropertyName("sunset")]
+    public long Sunset { get; set; }
+}
 
-            [JsonProperty("id")]
-            public long Id { get; set; }
+public class WeatherCondition
+{
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-            [JsonProperty("country")]
-            public string Country { get; set; }
+    [JsonPropertyName("main")]
+    public string Main { get; set; } = string.Empty;
 
-            [JsonProperty("sunrise")]
-            public long Sunrise { get; set; }
+    [JsonPropertyName("description")]
+    public string Description { get; set; } = string.Empty;
 
-            [JsonProperty("sunset")]
-            public long Sunset { get; set; }
-        }
+    [JsonPropertyName("icon")]
+    public string Icon { get; set; } = string.Empty;
+}
 
-        public partial class Weather
-        {
-            [JsonProperty("id")]
-            public long Id { get; set; }
+public class Wind
+{
+    [JsonPropertyName("speed")]
+    public double Speed { get; set; }
 
-            [JsonProperty("main")]
-            public string Main { get; set; }
+    [JsonPropertyName("deg")]
+    public long Deg { get; set; }
 
-            [JsonProperty("description")]
-            public string Description { get; set; }
+    [JsonPropertyName("gust")]
+    public double Gust { get; set; }
+}
 
-            [JsonProperty("icon")]
-            public string Icon { get; set; }
-        }
-
-        public partial class Wind
-        {
-            [JsonProperty("speed")]
-            public float Speed { get; set; }
-
-            [JsonProperty("deg")]
-            public long Deg { get; set; }
-
-            [JsonProperty("gust")]
-            public double Gust { get; set; }
-        }
-    
+public class Clouds
+{
+    [JsonPropertyName("all")]
+    public long All { get; set; }
 }

@@ -8,6 +8,12 @@ builder.Services.AddHttpClient("ApiNinjas", client =>
     client.DefaultRequestHeaders.Add("X-Api-Key", builder.Configuration["ApiNinjas:ApiKey"]);
 });
 
+builder.Services.AddHttpClient("IpApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["IpApi:BaseUrl"]!);
+});
+
+
 builder.Services.AddScoped<ICitiesData, CitiesData>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

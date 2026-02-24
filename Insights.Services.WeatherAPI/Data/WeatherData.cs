@@ -12,6 +12,7 @@ public class WeatherData(IHttpClientFactory httpClientFactory, IConfiguration co
 
     public async Task<WeatherDto?> GetWeatherByLocationAsync(double lat, double lon)
     {
+        WeatherDto res;
         var client = httpClientFactory.CreateClient("OpenWeather");
 
         var endpoint = configuration["OpenWeather:Endpoints:GetWeatherByLocation"]!
@@ -20,12 +21,9 @@ public class WeatherData(IHttpClientFactory httpClientFactory, IConfiguration co
             .Replace("##APIKEY##", configuration["OpenWeather:ApiKey"]);
 
         var response = await client.GetAsync(endpoint);
-
-        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            return null;
-
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<WeatherDto>(JsonOptions);
+        res = await response.Content.ReadFromJsonAsync<WeatherDto>(JsonOptions);
+        return res;
     }
 }

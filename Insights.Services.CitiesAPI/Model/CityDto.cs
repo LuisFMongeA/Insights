@@ -4,17 +4,20 @@ namespace Insights.CitiesAPI.Model
 {
     public class CityDto
     {
-        [JsonPropertyName("name")]
+        [JsonPropertyName("city")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("latitude")]
+        [JsonPropertyName("lat")]
         public double Latitude { get; set; }
 
-        [JsonPropertyName("longitude")]
+        [JsonPropertyName("lon")]
         public double Longitude { get; set; }
 
         [JsonPropertyName("country")]
         public string Country { get; set; } = string.Empty;
+
+        [JsonPropertyName("countryCode")]
+        public string CountryCode { get; set; } = string.Empty;
 
         [JsonPropertyName("population")]
         public long Population { get; set; }
