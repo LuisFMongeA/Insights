@@ -2,6 +2,7 @@
 using Insights.Gateway.HttpClients;
 using Insights.Gateway.Model;
 using Insights.MessageBus;
+using Insights.SharedKernel.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Insights.Gateway.Controllers;
@@ -43,7 +44,7 @@ public class GeoController(
         var country = await countryTask;
         var weather = await weatherTask;
 
-        _ = messageBus.PublishAsync("geo.info.requested", new GeoInfoRequestedEvent
+        _ = messageBus.PublishAsync(NatsSubjects.GeoInfoRequested, new GeoInfoRequestedEvent
         {
             Lat = city.Latitude,
             Lon = city.Longitude,

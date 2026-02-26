@@ -1,6 +1,7 @@
 ﻿using Insights.AuditAPI.Data;
 using Insights.Contracts.Events;
 using Insights.Services.AuditAPI.Model;
+using Insights.SharedKernel.Constants;
 using NATS.Client.Core;
 
 namespace Insights.AuditAPI.Messaging;
@@ -26,7 +27,7 @@ public class NatsConsumer(
                 logger.LogInformation("NATS connected. Listening on geo.info.requested");
 
                 await foreach (var msg in connection.SubscribeAsync<GeoInfoRequestedEvent>(
-                    "geo.info.requested", cancellationToken: ct))
+                    NatsSubjects.GeoInfoRequested, cancellationToken: ct))
                 {
                     if (msg.Data is null) continue;
 

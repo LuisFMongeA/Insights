@@ -1,26 +1,45 @@
 using Insights.CountriesAPI.Data;
+using Insights.SharedKernel.Extensions;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddHttpClient("RestCountries", client =>
+try
 {
-    client.BaseAddress = new Uri(builder.Configuration["RestCountries:BaseUrl"]!);
-});
+    Log.Information("Starting Insights.CountriesAPI");
+    var builder = WebApplication.CreateBuilder(args);
+    builder.AddSerilog();
 
-builder.Services.AddScoped<ICountriesData, CountriesData>();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    builder.Services.AddHttpClient("RestCountries", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["RestCountries:BaseUrl"]!);
+    });
 
-var app = builder.Build();
+    builder.Services.AddScoped<ICountriesData, CountriesData>();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-if (app.Environment.IsDevelopment())
+    var app = builder.Build();
+
+    app.UseExceptionMiddleware();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+    app.Run();
+}
+catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+
+    Log.Fatal(ex, "Insights.CountriesAPI terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();

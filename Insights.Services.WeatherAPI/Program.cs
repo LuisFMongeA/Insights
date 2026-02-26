@@ -1,33 +1,50 @@
+using Insights.SharedKernel.Extensions;
 using Insights.WeatherAPI.Data;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var apiKey = builder.Configuration["OpenWeather:ApiKey"];
-
-builder.Services.AddHttpClient("OpenWeather", client =>
+try
 {
-    var baseUrl = builder.Configuration["OpenWeather:BaseUrl"]!;
-    // OpenWeather usa appid como query param, lo añadimos como BaseAddress con el param fijo
-    client.BaseAddress = new Uri(baseUrl);
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
+    Log.Information("Starting Insights.WeatherAPI");
+    var builder = WebApplication.CreateBuilder(args);
+    builder.AddSerilog();
 
-// Registramos el apiKey en los endpoints via configuración, 
-// WeatherData lo añade al endpoint en cada llamada
-builder.Services.AddScoped<IWeatherData, WeatherData>();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    var apiKey = builder.Configuration["OpenWeather:ApiKey"];
 
-var app = builder.Build();
+    builder.Services.AddHttpClient("OpenWeather", client =>
+    {
+        var baseUrl = builder.Configuration["OpenWeather:BaseUrl"]!;
+        // OpenWeather usa appid como query param, lo añadimos como BaseAddress con el param fijo
+        client.BaseAddress = new Uri(baseUrl);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+    });
 
-if (app.Environment.IsDevelopment())
+    // Registramos el apiKey en los endpoints via configuración, 
+    // WeatherData lo añade al endpoint en cada llamada
+    builder.Services.AddScoped<IWeatherData, WeatherData>();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+
+    var app = builder.Build();
+    app.UseExceptionMiddleware();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+    app.Run();
+}
+catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Fatal(ex, "Insights.WeatherAPI terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
