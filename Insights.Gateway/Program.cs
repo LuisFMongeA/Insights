@@ -11,6 +11,7 @@ try
     builder.AddSerilog();
     builder.Services.AddControllers();
     builder.Services.AddHttpClients(builder.Configuration);
+    builder.Services.AddJwtAuthentication(builder.Configuration);
     builder.Services.AddSingleton<IMessageBus, NatsMessageBus>();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -26,6 +27,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
+    app.UseScopeMiddleware();
     app.MapControllers();
     app.Run();
 

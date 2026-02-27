@@ -2,11 +2,13 @@
 using Insights.Gateway.HttpClients;
 using Insights.Gateway.Model;
 using Insights.MessageBus;
+using Insights.SharedKernel.Attributes;
 using Insights.SharedKernel.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Insights.Gateway.Controllers;
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class GeoController(
@@ -16,6 +18,7 @@ public class GeoController(
     IMessageBus messageBus) : ControllerBase
 {
     [HttpGet]
+    [RequireScope(AuthConstants.Scopes.GeoRead)]
     public async Task<ActionResult<GeoInfoDto>> Get([FromQuery] GeoRequestDto request)
     {
         CityDto city;
