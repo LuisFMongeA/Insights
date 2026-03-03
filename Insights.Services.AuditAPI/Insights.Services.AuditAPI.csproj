@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>7039d0b7-b7ed-4af5-903d-20cf84d35355</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Contracts\Insights.Contracts.csproj" />
+    <ProjectReference Include="..\Insights.Contracts\Insights.Contracts.csproj" />
+    <ProjectReference Include="..\Insights.Domain\Insights.Domain.csproj" />
+    <ProjectReference Include="..\Insights.Infraestructure.Data\Insights.Infraestructure.Data.csproj" />
 	<ProjectReference Include="..\Insights.SharedKernel\Insights.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

@@ -21,6 +21,7 @@ try
     var app = builder.Build();
 
     app.UseExceptionMiddleware();
+    app.UseApiKeyMiddleware();
 
     if (app.Environment.IsDevelopment())
     {

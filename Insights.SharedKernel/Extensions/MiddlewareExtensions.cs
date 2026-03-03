@@ -9,4 +9,6 @@ public static class MiddlewareExtensions
         => app.UseMiddleware<ExceptionMiddleware>();
     public static IApplicationBuilder UseScopeMiddleware(this IApplicationBuilder app)
         => app.UseMiddleware<ScopeMiddleware>();
+    public static IApplicationBuilder UseApiKeyMiddleware(this IApplicationBuilder app)
+        => app.UseMiddleware<ApiKeyMiddleware>();
 }
