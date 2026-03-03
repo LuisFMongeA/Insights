@@ -6,6 +6,7 @@ using Insights.SharedKernel.Attributes;
 using Insights.SharedKernel.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog.Core;
 
 namespace Insights.Gateway.Controllers;
 [Authorize]
@@ -15,7 +16,8 @@ public class GeoController(
     CitiesHttpClient citiesClient,
     CountriesHttpClient countriesClient,
     WeatherHttpClient weatherClient,
-    IMessageBus messageBus) : ControllerBase
+    IMessageBus messageBus,
+    ILogger<GeoController> logger) : ControllerBase
 {
     [HttpGet]
     [RequireScope(AuthConstants.Scopes.GeoRead)]
@@ -47,14 +49,16 @@ public class GeoController(
         var country = await countryTask;
         var weather = await weatherTask;
 
+        logger.LogInformation("Publishing event to NATS for city: {City}", city.Name);
         _ = messageBus.PublishAsync(NatsSubjects.GeoInfoRequested, new GeoInfoRequestedEvent
         {
             Lat = city.Latitude,
             Lon = city.Longitude,
             ParamCityName = request.CityName,
             ResolvedCityName = city.Name,
-            CountryCode = city.CountryCode
+            CountryCode = city.Country
         });
+        logger.LogInformation("Event published to NATS");
 
         // 3. Convierte unix timestamps a DateTime
         var sunrise = DateTimeOffset.FromUnixTimeSeconds(weather?.Sys?.Sunrise ?? 0).UtcDateTime;

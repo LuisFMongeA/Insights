@@ -2,10 +2,8 @@
 using Insights.Domain.Models;
 using Insights.Domain.Repositories;
 using Insights.SharedKernel.Constants;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NATS.Client.Core;
+using NATS.Client.Serializers.Json;
 
 namespace Insights.AuditAPI.Messaging;
 
@@ -22,7 +20,11 @@ public class NatsConsumer(
         {
             try
             {
-                await using var connection = new NatsConnection(new NatsOpts { Url = url });
+                await using var connection = new NatsConnection(new NatsOpts
+                {
+                    Url = url,
+                    SerializerRegistry = NatsJsonSerializerRegistry.Default
+                });
                 await connection.ConnectAsync();
 
                 logger.LogInformation("NATS connected. Listening on {Subject}",
@@ -50,7 +52,10 @@ public class NatsConsumer(
                             CountryCode = msg.Data.CountryCode
                         };
 
+                        logger.LogInformation("Saving audit entry for city: {City}", entry.ResolvedCityName);
                         await unitOfWork.AuditRepository.AddAsync(entry);
+
+                        logger.LogInformation("Committing...");
                         await unitOfWork.CommitAsync(ct);
 
                         logger.LogInformation("Audit saved for city: {City}",

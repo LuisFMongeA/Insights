@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{EFA712D8-ACF6-40C5-88FE-31CE9ADE3AEF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructure", "Infraestructure", "{5F6EADF4-92D2-4613-BB0A-709F2D4F6A27}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5F6EADF4-92D2-4613-BB0A-709F2D4F6A27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Gateway", "Insights.Gateway\Insights.Gateway.csproj", "{1AE02390-458E-4C96-819D-69A46FF56175}"
 EndProject
@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Services.StatsAPI"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Domain", "Insights.Domain\Insights.Domain.csproj", "{49CC894B-FE80-429E-B173-B1A8B8A8A359}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Infraestructure.Data", "Insights.Infraestructure.Data\Insights.Infraestructure.Data.csproj", "{A5DDB777-C81A-42D2-BC60-D562F0096B88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Infrastructure.Data", "Insights.Infrastructure.Data\Insights.Infrastructure.Data.csproj", "{A5DDB777-C81A-42D2-BC60-D562F0096B88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,3 +117,4 @@ Global
 		SolutionGuid = {971DE201-BADA-45B7-8F3F-54735064A650}
 	EndGlobalSection
 EndGlobal
+
