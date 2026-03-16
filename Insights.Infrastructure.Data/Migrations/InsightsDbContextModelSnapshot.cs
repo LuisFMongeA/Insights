@@ -61,11 +61,57 @@ namespace Insights.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReceivedAt");
+
                     b.HasIndex("RequestedAt");
 
                     b.HasIndex("ResolvedCityName");
 
-                    b.ToTable("audit_entries");
+                    b.ToTable("audit_entries", (string)null);
+                });
+
+            modelBuilder.Entity("Insights.Domain.Models.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("payload");
+
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_at");
+
+                    b.Property<int>("RetryCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("retry_count");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("ProcessedAt");
+
+                    b.HasIndex("ProcessedAt", "CreatedAt");
+
+                    b.ToTable("event_messages", (string)null);
                 });
 
             modelBuilder.Entity("Insights.Domain.Models.StatEntry", b =>
@@ -105,7 +151,7 @@ namespace Insights.Infrastructure.Data.Migrations
 
                     b.HasIndex("RequestedAt");
 
-                    b.ToTable("stat_entries");
+                    b.ToTable("stat_entries", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
-﻿using Insights.Infrastructure.Data.Context;
+﻿using Insights.Domain.Services;
+using Insights.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +9,8 @@ namespace Insights.Infrastructure.Data.Services;
 
 public class MigrationService(
     IServiceScopeFactory scopeFactory,
-    ILogger<MigrationService> logger) : IHostedService
+    ILogger<MigrationService> logger,
+    IDatabaseReadyService databaseReadyService) : IHostedService
 {
     public async Task StartAsync(CancellationToken ct)
     {
@@ -19,6 +21,8 @@ public class MigrationService(
             .GetRequiredService<InsightsDbContext>();
 
         await context.Database.MigrateAsync(ct);
+
+        databaseReadyService.SetReady();
 
         logger.LogInformation("Database migrations applied successfully");
     }

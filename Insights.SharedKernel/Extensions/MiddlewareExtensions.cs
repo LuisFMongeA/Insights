@@ -1,5 +1,6 @@
 ﻿using Insights.SharedKernel.Middleware;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Insights.SharedKernel.Extensions;
 

@@ -6,14 +6,28 @@ using System.Text.Json;
 
 namespace Insights.SharedKernel.Middleware;
 
-public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger):IMiddleware
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public async Task InvokeAsync(HttpContext context)
+    private static async Task WriteErrorResponse(HttpContext context, HttpStatusCode statusCode, string message)
+    {
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)statusCode;
+
+        var response = new ErrorResponse
+        {
+            StatusCode = (int)statusCode,
+            Message = message
+        };
+
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response, JsonOptions));
+    }
+
+    async Task IMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
@@ -37,19 +51,5 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             await WriteErrorResponse(context, HttpStatusCode.InternalServerError,
                 "An unexpected error occurred");
         }
-    }
-
-    private static async Task WriteErrorResponse(HttpContext context, HttpStatusCode statusCode, string message)
-    {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)statusCode;
-
-        var response = new ErrorResponse
-        {
-            StatusCode = (int)statusCode,
-            Message = message
-        };
-
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response, JsonOptions));
     }
 }

@@ -8,22 +8,12 @@ public class InsightsDbContext(DbContextOptions<InsightsDbContext> options)
 {
     public DbSet<AuditEntry> AuditEntries => Set<AuditEntry>();
     public DbSet<StatEntry> StatEntries => Set<StatEntry>();
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AuditEntry>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.RequestedAt);
-            entity.HasIndex(e => e.ResolvedCityName);
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(
+        typeof(InsightsDbContext).Assembly);
 
-        modelBuilder.Entity<StatEntry>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.CityName);
-            entity.HasIndex(e => e.CountryCode);
-            entity.HasIndex(e => e.RequestedAt);
-        });
     }
 }

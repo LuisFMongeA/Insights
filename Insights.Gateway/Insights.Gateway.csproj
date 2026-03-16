@@ -15,6 +15,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Insights.Contracts\Insights.Contracts.csproj" />
 	  <ProjectReference Include="..\Insights.Contracts\Insights.Contracts.csproj" />
+	  <ProjectReference Include="..\Insights.Domain\Insights.Domain.csproj" />
+	  <ProjectReference Include="..\Insights.Infrastructure.Data\Insights.Infrastructure.Data.csproj" />
 	  <ProjectReference Include="..\Insights.ServiceBus\Insights.MessageBus.csproj" />
 	  <ProjectReference Include="..\Insights.SharedKernel\Insights.SharedKernel.csproj" />
 	</ItemGroup>

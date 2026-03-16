@@ -7,7 +7,7 @@ try
     Log.Information("Starting Insights.AuthAPI");
 
     var builder = WebApplication.CreateBuilder(args);
-
+    builder.AddSharedConfiguration();
     builder.AddSerilog();
     builder.Services.AddAuthServices();
     builder.Services.AddControllers();
@@ -39,6 +39,8 @@ try
         }
     });
     });
+
+    builder.Services.AddSharedMiddlewares();
 
     var app = builder.Build();
 

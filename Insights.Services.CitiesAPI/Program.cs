@@ -6,6 +6,7 @@ try
 {
     Log.Information("Starting Insights.CitiesAPI");
     var builder = WebApplication.CreateBuilder(args);
+    builder.AddSharedConfiguration();
     builder.AddSerilog();
 
     builder.Services.AddHttpClient("ApiNinjas", client =>
@@ -24,6 +25,7 @@ try
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddSharedMiddlewares();
 
     var app = builder.Build();
 

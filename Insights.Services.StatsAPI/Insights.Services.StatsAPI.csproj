@@ -7,4 +7,9 @@
     <UserSecretsId>6d78f31a-95d7-48a6-841e-045597802ba8</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Insights.Domain\Insights.Domain.csproj" />
+    <ProjectReference Include="..\Insights.SharedKernel\Insights.SharedKernel.csproj" />
+  </ItemGroup>
+
 </Project>
