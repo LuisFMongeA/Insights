@@ -1,4 +1,5 @@
 ﻿using Insights.Contracts.Events;
+using Insights.Gateway.Filters;
 using Insights.Gateway.HttpClients;
 using Insights.Gateway.Model;
 using Insights.Gateway.Services;
@@ -16,6 +17,7 @@ namespace Insights.Gateway.Controllers;
 public class GeoController(IGeoService geoService) : ControllerBase
 {
     [HttpGet]
+    [ValidateDto<GeoRequestDto>]
     [RequireScope(AuthConstants.Scopes.GeoRead)]
     public async Task<ActionResult<GeoInfoDto>> Get([FromQuery] GeoRequestDto request)
     {

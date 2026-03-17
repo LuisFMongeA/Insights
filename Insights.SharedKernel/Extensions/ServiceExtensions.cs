@@ -11,6 +11,7 @@ public static class ServiceExtensions
         services.AddTransient<ExceptionMiddleware>();
         //services.AddTransient<ScopeMiddleware>();
         //services.AddTransient<ApiKeyMiddleware>();
+        //services.AddTransient<SecurityHeadersMiddleware>();
         return services;
     }
 }

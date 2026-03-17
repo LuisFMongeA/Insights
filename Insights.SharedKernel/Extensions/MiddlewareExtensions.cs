@@ -12,4 +12,6 @@ public static class MiddlewareExtensions
         => app.UseMiddleware<ScopeMiddleware>();
     public static IApplicationBuilder UseApiKeyMiddleware(this IApplicationBuilder app)
         => app.UseMiddleware<ApiKeyMiddleware>();
+    public static IApplicationBuilder UseSecurityHeadersMiddleware(this IApplicationBuilder app)
+        => app.UseMiddleware<SecurityHeadersMiddleware>();
 }
