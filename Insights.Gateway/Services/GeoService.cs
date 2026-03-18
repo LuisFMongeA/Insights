@@ -4,13 +4,13 @@ using Insights.Domain.Models;
 using Insights.Domain.Repositories;
 using Insights.Gateway.HttpClients;
 using Insights.Gateway.Model;
-using Insights.SharedKernel.Constants;
+using Insights.Gateway.Strategies;
 using System.Text.Json;
 
 namespace Insights.Gateway.Services;
 
 public class GeoService(
-    CitiesHttpClient citiesClient,
+    IEnumerable<ICityResolutionStrategy> cityResolutionsStrategies,
     CountriesHttpClient countriesClient,
     WeatherHttpClient weatherClient,
     IOutboxRepository  outboxRepository,
@@ -18,16 +18,9 @@ public class GeoService(
 {
     public async Task<GeoInfoDto> GetGeoInfoAsync(GeoRequestDto request)
     {
-
-        var city = request switch
-        {
-            { CityName: not null and not "" } =>
-                await citiesClient.GetCitiesByNameAsync(request.CityName),
-            { Lat: not null, Lon: not null } =>
-                await citiesClient.GetCityByCoordinatesAsync(request.Lat.Value, request.Lon.Value),
-            _ =>
-                await citiesClient.GetCityByIpAddressAsync(request.IpAddress!)
-        };
+        var strategy = cityResolutionsStrategies.FirstOrDefault(s => s.CanHandle(request));
+        var city = await strategy.ResolveAsync(request) 
+            ?? throw new InvalidOperationException("No resolution strategy found for the given request");
 
         var countryTask = countriesClient.GetCountryByCodeAsync(city.CountryCode);
         var weatherTask = weatherClient.GetWeatherByLocationAsync(city.Latitude, city.Longitude);
@@ -46,9 +39,9 @@ public class GeoService(
         {
             CityName = city.Name,
             CityPopulation = city.Population,
-            CountryCode = city.CountryCode,
+            CountryCode = country?.Cca2!,
             CountryName = country?.Name?.Common ?? string.Empty,
-            Region = country?.Region ?? string.Empty,
+            Region = city.Region ?? country?.Region ?? string.Empty,
             Subregion = country?.Subregion ?? string.Empty,
             Flag = country?.Flag ?? string.Empty,
             WeatherDescription = weather?.Weather?.FirstOrDefault()?.Description ?? string.Empty,
@@ -75,7 +68,7 @@ public class GeoService(
                 Lon = city.Longitude,
                 ParamCityName = request.CityName,
                 ResolvedCityName = city.Name,
-                CountryCode = city.Country
+                CountryCode = country?.Cca2!
             }),
             CreatedAt = DateTime.UtcNow
         });

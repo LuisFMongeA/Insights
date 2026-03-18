@@ -126,8 +126,10 @@ public class AuthService(IConfiguration configuration, RsaKeyService rsaKeyServi
            .Where(s => !string.IsNullOrEmpty(s))
            .ToList();
 
-            if (id == clientId && secret == clientSecret)
-                return (id, name ?? id, scopes);
+            if (id == clientId && CryptographicOperations.FixedTimeEquals(
+                 Encoding.UTF8.GetBytes(secret ?? string.Empty),
+                 Encoding.UTF8.GetBytes(clientSecret)))
+                    return (id, name ?? id, scopes);
         }
 
         return null;

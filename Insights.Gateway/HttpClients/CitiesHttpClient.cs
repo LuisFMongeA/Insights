@@ -17,9 +17,11 @@ public class CitiesHttpClient(HttpClient httpClient, IConfiguration configuratio
 
         var response = await httpClient.GetAsync(endpoint);
         response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync<CityDto>(JsonOptions)
-            ?? throw new Exception($"Empty response from CitiesAPI for: {cityName}");
+ 
+        var cities = await response.Content.ReadFromJsonAsync<List<CityDto>>(JsonOptions);
+        return cities?.FirstOrDefault()
+            ?? throw new Exception($"No city found for: {cityName}");
+        
     }
 
     public async Task<CityDto?> GetCityByCoordinatesAsync(double lat, double lon)

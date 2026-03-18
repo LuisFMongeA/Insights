@@ -3,11 +3,13 @@ using Insights.Domain.Services;
 using Insights.Gateway.Extensions;
 using Insights.Gateway.Filters;
 using Insights.Gateway.Services;
+using Insights.Gateway.Strategies;
 using Insights.Gateway.Validator;
 using Insights.Infrastructure.Data.Extensions;
 using Insights.MessageBus;
 using Insights.MessageBus.Extensions;
 using Insights.SharedKernel.Extensions;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 using System.Threading.RateLimiting;
 
@@ -16,6 +18,10 @@ try
 {
     Log.Information("Starting Insights.Gateway");
     var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.AddServerHeader = false;
+    });
     builder.AddSharedConfiguration();
     builder.AddSerilog();
     builder.Services.AddControllers();
@@ -43,6 +49,17 @@ try
     });
     builder.Services.AddValidatorsFromAssemblyContaining<GeoRequestDtoValidator>();
     builder.Services.AddScoped(typeof(ValidationFilter<>));
+    builder.Services.AddMemoryCache();
+    builder.Services.AddScoped<GeoService>();
+    builder.Services.AddScoped<IGeoService, CachedGeoService>(sp =>
+        new CachedGeoService(
+            sp.GetRequiredService<GeoService>(),
+            sp.GetRequiredService<IMemoryCache>(),
+            sp.GetRequiredService<ILogger<CachedGeoService>>()
+    ));
+    builder.Services.AddScoped<ICityResolutionStrategy, CityByNameStrategy>();
+    builder.Services.AddScoped<ICityResolutionStrategy, CityByCoordinatesStrategy>();
+    builder.Services.AddScoped<ICityResolutionStrategy, CityByIpStrategy>();
 
     var app = builder.Build();
     app.UseExceptionMiddleware();

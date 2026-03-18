@@ -32,7 +32,7 @@ public class CitiesData(IHttpClientFactory httpClientFactory, IConfiguration con
     {
         var client = httpClientFactory.CreateClient("ApiNinjas");
 
-        var endpoint = configuration["ApiNinjas:Endpoints:GetCitiesByName"]!
+        var endpoint = configuration["ApiNinjas:Endpoints:GetCitiesByCoordinates"]!
             .Replace("##LAT##", lat.ToString(CultureInfo.InvariantCulture))
             .Replace("##LON##", lon.ToString(CultureInfo.InvariantCulture));
 

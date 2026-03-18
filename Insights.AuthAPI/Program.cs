@@ -1,12 +1,17 @@
 using Insights.AuthAPI.Extensions;
 using Insights.SharedKernel.Extensions;
 using Serilog;
+using System.Threading.RateLimiting;
 
 try
 {
     Log.Information("Starting Insights.AuthAPI");
 
     var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.AddServerHeader = false;
+    });
     builder.AddSharedConfiguration();
     builder.AddSerilog();
     builder.Services.AddAuthServices();
@@ -39,12 +44,32 @@ try
         }
     });
     });
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.RejectionStatusCode = 429;
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+            RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: context.Connection?.RemoteIpAddress?.ToString() ?? "anonymous",
+                factory: _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 10,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueLimit = 0
+                }));
+    });
 
     builder.Services.AddSharedMiddlewares();
 
     var app = builder.Build();
-
     app.UseExceptionMiddleware();
+    app.UseSecurityHeadersMiddleware();
+    app.UseHttpsRedirection();
+    app.UseRateLimiter();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseRouting();
+    app.MapControllers();
+
 
     if (app.Environment.IsDevelopment())
     {
@@ -52,10 +77,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseHttpsRedirection();
-    app.UseAuthorization();
-    app.UseRouting();
-    app.MapControllers();
+
     app.Run();
 }
 catch (Exception ex)
