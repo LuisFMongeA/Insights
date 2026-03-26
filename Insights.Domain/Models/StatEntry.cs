@@ -1,27 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Insights.Domain.ValueObjects;
 
 namespace Insights.Domain.Models;
 
-[Table("stat_entries")]
 public class StatEntry
 {
-    [Key]
-    [Column("id")]
-    public Guid Id { get; set; }
-
-    [Column("city_name")]
-    public string CityName { get; set; } = string.Empty;
-
-    [Column("country_code")]
-    public string CountryCode { get; set; } = string.Empty;
-
-    [Column("lat")]
-    public double Lat { get; set; }
-
-    [Column("lon")]
-    public double Lon { get; set; }
-
-    [Column("requested_at")]
-    public DateTime RequestedAt { get; set; }
+    public Guid Id { get; private set; }
+    public Coordinates Coordinates { get; private set; }
+    public CountryCode CountryCode { get; private set; }
+    public string CityName { get; private set; }    
+    public DateTime RequestedAt { get; private set; }
+    private StatEntry() { }
+    public static StatEntry Create(double lat, double lon, string cityName, string countryCode, DateTime requestedAt) 
+    {
+        ArgumentNullException.ThrowIfNullOrEmpty(cityName, nameof(cityName));
+        return new StatEntry
+        {
+            Id = Guid.NewGuid(),
+            Coordinates = Coordinates.Create(lat, lon),
+            CountryCode = CountryCode.Create(countryCode),
+            CityName = cityName,
+            RequestedAt = requestedAt
+        };
+    }
 }

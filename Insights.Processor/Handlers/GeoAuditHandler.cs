@@ -11,18 +11,8 @@ public class GeoAuditHandler(IServiceScopeFactory scopeFactory, ILogger<GeoAudit
     {
         using var scope = scopeFactory.CreateScope();
         var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-        AuditEntry entry = new AuditEntry
-        {
-            Id = message.Id,
-            CountryCode = message.CountryCode,
-            Lat = message.Lat,
-            Lon = message.Lon,
-            ResolvedCityName = message.ResolvedCityName,
-            CityName = message.ParamCityName,
-            RequestedAt = message.RequestedAt,
-            ReceivedAt = DateTime.UtcNow
-            
-        };
+        AuditEntry entry = AuditEntry.Create(message.Lat, message.Lon, message.ParamCityName ?? "", message.ResolvedCityName,message.CountryCode, message.RequestedAt);
+
         try
         {
             await uow.AuditRepository.AddAsync(entry);

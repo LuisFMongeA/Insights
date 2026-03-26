@@ -13,15 +13,7 @@ public class GeoStatsHandler(IServiceScopeFactory scopeFactory, ILogger<GeoStats
         using var scope = scopeFactory.CreateScope();
         var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-        StatEntry entry = new StatEntry
-        {
-            Id = message.Id,
-            Lat = message.Lat,
-            Lon = message.Lon,
-            CityName = message.ResolvedCityName,
-            RequestedAt = message.RequestedAt,
-            CountryCode = message.CountryCode,
-        };
+        StatEntry entry = StatEntry.Create(message.Lat, message.Lon, message.ResolvedCityName, message.CountryCode, message.RequestedAt);
 
         try
         {

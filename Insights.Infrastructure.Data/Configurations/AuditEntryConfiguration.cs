@@ -12,10 +12,16 @@ namespace Insights.Infrastructure.Data.Configurations
             builder.ToTable("audit_entries");
             builder.HasKey(e => e.Id);
             builder.Property(e =>e.Id).HasColumnName("id");
-            builder.Property(e => e.Lat).HasColumnName("lat");
-            builder.Property(e => e.Lon).HasColumnName("lon");
+            builder.OwnsOne(e => e.Coordinates, coordinates => 
+            {
+                coordinates.Property(c=>c.Lat).HasColumnName("lat");
+                coordinates.Property(c => c.Lon).HasColumnName("lon");
+            });
             builder.Property(e => e.CityName).HasColumnName("city_name");
-            builder.Property(e => e.CountryCode).HasColumnName("country_code");
+            builder.OwnsOne(e => e.CountryCode, countryCode => 
+            {
+                countryCode.Property(c => c.Code).HasColumnName("country_code");
+            });
             builder.Property(e => e.ResolvedCityName).HasColumnName("resolved_city_name");
             builder.HasIndex(e => e.ResolvedCityName);
             builder.Property(e => e.ReceivedAt).HasColumnName("received_at").IsRequired();

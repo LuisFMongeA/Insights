@@ -11,16 +11,16 @@ namespace Insights.Gateway.Services;
 
 public class GeoService(
     IEnumerable<ICityResolutionStrategy> cityResolutionsStrategies,
-    CountriesHttpClient countriesClient,
-    WeatherHttpClient weatherClient,
+    ICountriesHttpClient countriesClient,
+    IWeatherHttpClient weatherClient,
     IOutboxRepository  outboxRepository,
     ILogger<GeoService> logger) : IGeoService
 {
     public async Task<GeoInfoDto> GetGeoInfoAsync(GeoRequestDto request)
     {
-        var strategy = cityResolutionsStrategies.FirstOrDefault(s => s.CanHandle(request));
-        var city = await strategy.ResolveAsync(request) 
-            ?? throw new InvalidOperationException("No resolution strategy found for the given request");
+        var strategy = cityResolutionsStrategies.FirstOrDefault(s => s.CanHandle(request)) ?? throw new InvalidOperationException("No resolution strategy found for the given request"); ;
+        var city = await strategy.ResolveAsync(request);
+            
 
         var countryTask = countriesClient.GetCountryByCodeAsync(city.CountryCode);
         var weatherTask = weatherClient.GetWeatherByLocationAsync(city.Latitude, city.Longitude);

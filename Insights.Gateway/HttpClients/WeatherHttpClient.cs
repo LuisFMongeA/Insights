@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Insights.Gateway.HttpClients;
 
-public class WeatherHttpClient(HttpClient httpClient, IConfiguration configuration)
+public class WeatherHttpClient(HttpClient httpClient, IConfiguration configuration) : IWeatherHttpClient
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {

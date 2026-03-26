@@ -44,7 +44,6 @@ public class CitiesHttpClient(HttpClient httpClient, IConfiguration configuratio
 
         var response = await httpClient.GetAsync(endpoint);
         response.EnsureSuccessStatusCode();
-        res = await response.Content.ReadFromJsonAsync<CityDto?>(JsonOptions);
-        return res;
+        return await response.Content.ReadFromJsonAsync<CityDto?>(JsonOptions)!;
     }
 }

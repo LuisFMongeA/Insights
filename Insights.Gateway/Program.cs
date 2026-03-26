@@ -2,6 +2,7 @@ using FluentValidation;
 using Insights.Domain.Services;
 using Insights.Gateway.Extensions;
 using Insights.Gateway.Filters;
+using Insights.Gateway.HttpClients;
 using Insights.Gateway.Services;
 using Insights.Gateway.Strategies;
 using Insights.Gateway.Validator;
@@ -60,6 +61,8 @@ try
     builder.Services.AddScoped<ICityResolutionStrategy, CityByNameStrategy>();
     builder.Services.AddScoped<ICityResolutionStrategy, CityByCoordinatesStrategy>();
     builder.Services.AddScoped<ICityResolutionStrategy, CityByIpStrategy>();
+    builder.Services.AddScoped<IWeatherHttpClient, WeatherHttpClient>();
+    builder.Services.AddScoped<ICountriesHttpClient, CountriesHttpClient>();
 
     var app = builder.Build();
     app.UseExceptionMiddleware();
@@ -88,4 +91,4 @@ finally
     Log.CloseAndFlush();
 }
 
-
+public partial class Program { }

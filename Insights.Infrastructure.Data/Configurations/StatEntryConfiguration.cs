@@ -11,12 +11,18 @@ namespace Insights.Infrastructure.Data.Configurations
             builder.ToTable("stat_entries");
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-            builder.Property(e => e.Lat).HasColumnName("lat");
-            builder.Property(e => e.Lon).HasColumnName("lon");
+            builder.OwnsOne(e => e.Coordinates, coordinates =>
+            {
+                coordinates.Property(c => c.Lat).HasColumnName("lat");
+                coordinates.Property(c => c.Lon).HasColumnName("lon");
+            });
             builder.Property(e => e.CityName).HasColumnName("city_name");
             builder.HasIndex(e => e.CityName);
-            builder.Property(e => e.CountryCode).HasColumnName("country_code");
-            builder.HasIndex(e => e.CountryCode);
+            builder.OwnsOne(e => e.CountryCode, countryCode => 
+            {
+                countryCode.Property(c => c.Code).HasColumnName("country_code");
+                countryCode.HasIndex(c => c.Code);
+            });
             builder.Property(e => e.RequestedAt).HasColumnName("requested_at").IsRequired();
             builder.HasIndex(e => e.RequestedAt);
 

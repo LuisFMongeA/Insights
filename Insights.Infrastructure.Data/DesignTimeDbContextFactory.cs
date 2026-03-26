@@ -12,6 +12,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<InsightsDb
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true)
+            .AddUserSecrets<DesignTimeDbContextFactory>()
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<InsightsDbContext>();

@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Insights.Gateway.HttpClients;
 
-public class CountriesHttpClient(HttpClient httpClient, IConfiguration configuration)
+public class CountriesHttpClient(HttpClient httpClient, IConfiguration configuration) : ICountriesHttpClient
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
