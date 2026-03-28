@@ -10,6 +10,7 @@ appsettings.*.json
 *.pem
 *.env
 *.env.*
+*.exe
 
 # User-specific files
 *.rsuser
