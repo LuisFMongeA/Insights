@@ -85,6 +85,7 @@ try
 } catch (Exception ex)
 {
     Log.Fatal(ex, "Insights.Gateway terminated unexpectedly");
+    throw;
 }
 finally
 {

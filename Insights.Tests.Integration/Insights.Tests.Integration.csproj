@@ -29,4 +29,11 @@
     <ProjectReference Include="..\Insights.Infrastructure.Data\Insights.Infrastructure.Data.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Content Include="..\Insights.Gateway\appsettings.Testing.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>appsettings.Testing.json</Link>
+		</Content>
+	</ItemGroup>
+
 </Project>
