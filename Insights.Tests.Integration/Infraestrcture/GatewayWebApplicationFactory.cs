@@ -1,12 +1,15 @@
 ﻿using Insights.Domain.Repositories;
 using Insights.Domain.Services;
 using Insights.Gateway.Services;
+using Insights.Infrastructure.Data.Context;
 using Insights.MessageBus.RabbitMq;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Moq;
 
 namespace Insights.Tests.Integration.Infraestrcture;
@@ -17,6 +20,7 @@ public class GatewayWebApplicationFactory: WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder) 
     {
+        builder.UseEnvironment("Testing");
         builder.ConfigureServices(services =>
         {
             // Elimina servicios reales
@@ -24,6 +28,10 @@ public class GatewayWebApplicationFactory: WebApplicationFactory<Program>
             services.RemoveAll<IOutboxRepository>();
             services.RemoveAll<IRabbitMqPublisher>();
             services.RemoveAll<IMessagePublisher>();
+            services.RemoveAll<IHostedService>();
+            services.RemoveAll<DbContextOptions<InsightsDbContext>>();
+            services.AddDbContext<InsightsDbContext>(options =>
+                options.UseInMemoryDatabase("TestDb"));
 
             // Añade mocks
             services.AddScoped(_ => MockGeoService.Object);
