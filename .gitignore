@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+nuget-local/
+
 # Sensitive configuration files
 appsettings.Development.json
 appsettings.*.json
