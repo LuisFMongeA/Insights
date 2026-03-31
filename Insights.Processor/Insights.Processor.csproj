@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -18,6 +18,6 @@
     <ProjectReference Include="..\Insights.Contracts\Insights.Contracts.csproj" />
     <ProjectReference Include="..\Insights.Domain\Insights.Domain.csproj" />
     <ProjectReference Include="..\Insights.Infrastructure.Data\Insights.Infrastructure.Data.csproj" />
-    <ProjectReference Include="..\Insights.ServiceBus\Insights.MessageBus.csproj" />
+    <ProjectReference Include="..\Insights.MessageBus\Insights.MessageBus.csproj" />
   </ItemGroup>
 </Project>

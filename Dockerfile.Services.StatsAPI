@@ -1,0 +1,30 @@
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+
+COPY Insights.Services.StatsAPI/Insights.Services.StatsAPI.csproj Insights.Services.StatsAPI/
+COPY Insights.SharedKernel/Insights.SharedKernel.csproj Insights.SharedKernel/
+COPY Insights.Domain/Insights.Domain.csproj Insights.Domain/
+
+
+
+RUN dotnet restore Insights.Services.StatsAPI/Insights.Services.StatsAPI.csproj
+
+COPY Insights.Services.StatsAPI/ Insights.Services.StatsAPI/
+COPY Insights.SharedKernel/ Insights.SharedKernel/
+COPY Insights.Domain/ Insights.Domain/
+
+
+RUN dotnet publish Insights.Services.StatsAPI/Insights.Services.StatsAPI.csproj \
+    --no-restore \
+    --configuration Release \
+    --output /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Insights.Services.StatsAPI.dll"]

@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Services.CitiesAPI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Services.WeatherAPI", "Insights.Services.WeatherAPI\Insights.Services.WeatherAPI.csproj", "{6FB0AEB6-7E34-4DDA-8E1D-54B8C32ADA33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.MessageBus", "Insights.ServiceBus\Insights.MessageBus.csproj", "{C38949EA-10BE-4E79-8C46-B5DF46727D17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.MessageBus", "Insights.MessageBus\Insights.MessageBus.csproj", "{C38949EA-10BE-4E79-8C46-B5DF46727D17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insights.Services.AuditAPI", "Insights.Services.AuditAPI\Insights.Services.AuditAPI.csproj", "{7CEF2C8C-6685-4143-AC8E-C03C59AB3704}"
 EndProject

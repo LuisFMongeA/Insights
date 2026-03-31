@@ -1,9 +1,6 @@
-﻿using Insights.Contracts.Events;
-using Insights.Gateway.Filters;
-using Insights.Gateway.HttpClients;
+﻿using Insights.Gateway.Filters;
 using Insights.Gateway.Model;
 using Insights.Gateway.Services;
-using Insights.MessageBus;
 using Insights.SharedKernel.Attributes;
 using Insights.SharedKernel.Constants;
 using Microsoft.AspNetCore.Authorization;

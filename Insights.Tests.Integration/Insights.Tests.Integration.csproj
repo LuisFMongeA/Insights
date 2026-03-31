@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Insights.Gateway\Insights.Gateway.csproj" />
     <ProjectReference Include="..\Insights.Infrastructure.Data\Insights.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Insights.MessageBus\Insights.MessageBus.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

@@ -1,0 +1,36 @@
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+
+COPY Insights.Services.AuditAPI/Insights.Services.AuditAPI.csproj Insights.Services.AuditAPI/
+COPY Insights.Domain/Insights.Domain.csproj Insights.Domain/
+COPY Insights.Contracts/Insights.Contracts.csproj Insights.Contracts/
+COPY Insights.Infrastructure.Data/Insights.Infrastructure.Data.csproj Insights.Infrastructure.Data/
+COPY Insights.MessageBus/Insights.MessageBus.csproj Insights.MessageBus/
+COPY Insights.SharedKernel/Insights.SharedKernel.csproj Insights.SharedKernel/
+
+
+
+RUN dotnet restore Insights.Services.AuditAPI/Insights.Services.AuditAPI.csproj
+
+COPY Insights.Services.AuditAPI/ Insights.Services.AuditAPI/
+COPY Insights.Domain/ Insights.Domain/
+COPY Insights.Contracts/ Insights.Contracts/
+COPY Insights.Infrastructure.Data/ Insights.Infrastructure.Data/
+COPY Insights.MessageBus/ Insights.MessageBus/
+COPY Insights.SharedKernel/ Insights.SharedKernel/
+
+
+RUN dotnet publish Insights.Services.AuditAPI/Insights.Services.AuditAPI.csproj \
+    --no-restore \
+    --configuration Release \
+    --output /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Insights.Services.AuditAPI.dll"]
