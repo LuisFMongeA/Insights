@@ -1,0 +1,39 @@
+services:  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    networks:
+    - insights-network
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.Gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - ConnectionStrings__InsightsDb=${INSIGHTS_DB}
+      - InternalApiKey=${INTERNAL_API_KEY}
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__Username=${RABBITMQ_USERNAME}
+      - RabbitMq__Password=${RABBITMQ_PASSWORD}
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ApiInfo__Auth__AuthApiUrl=http://authapi:8080
+      - ApiInfo__Countries__BaseUrl=http://countriesapi:8080
+      - ApiInfo__Cities__BaseUrl=http://citiesapi:8080
+      - ApiInfo__Weather__BaseUrl=http://weatherapi:8080
+      - ASPNETCORE_URLS=http://+:8080
+      
+    depends_on:
+      - rabbitmq
+    networks:
+      - insights-network
+
+networks:
+  insights-network:
+    driver: bridge

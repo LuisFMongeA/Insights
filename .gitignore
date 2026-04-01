@@ -16,6 +16,7 @@ appsettings.*.json
 *.pem
 *.env
 *.env.*
+!env.example
 *.exe
 
 # User-specific files
